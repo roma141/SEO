@@ -40,3 +40,40 @@ def new_querys():
         bd.Ejecuta("""insert into querys (query, state) values("%s",%s)""" 
                        % (a["query"].encode("utf-8"), 1))
     bd.cierra()
+
+def get_url():
+    bd = DB()
+    toDo = bd.Ejecuta("select id as idPositions, url from positions")
+    done = bd.Ejecuta("SELECT idPositions FROM pagesCrawlText GROUP BY idPositions")
+    badUrl = bd.Ejecuta("SELECT idPositions FROM badurl WHERE fix = 0 GROUP BY idPositions")
+    for a in done:
+        for b in toDo:
+            if a["idPositions"] == b["idPositions"]:
+                toDo.remove(b)
+                break
+    for a in badUrl:
+        for b in toDo:
+            if a["idPositions"] == b["idPositions"]:
+                toDo.remove(b)
+                break
+    bd.cierra()
+    return toDo[0]
+
+def save_tags(tags):
+    bd = DB()
+    for a in tags:
+        bd.Ejecuta("""insert into pagesCrawl (idPositions, position, type, text) values(%s,%s,"%s","%s")""" 
+                       % (a[0], a[1], a[2].encode("utf-8"), a[3].encode("utf-8")))
+    bd.cierra()
+
+def save_full_text(idPositions, title, text):
+    bd = DB()
+    bd.Ejecuta("""insert into pagesCrawlText (idPositions, title, text) values(%s,"%s","%s")""" 
+                   % (idPositions, title.encode("utf-8"), text.encode("utf-8")))
+    bd.cierra()
+
+def bad_url(idPositions):
+    bd = DB()
+    bd.Ejecuta("""insert into badurl (idPositions, fix) values(%s, %s)""" 
+                   % (idPositions, 0))
+    bd.cierra()
