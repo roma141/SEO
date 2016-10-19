@@ -37,7 +37,10 @@ def google_search():
             element["position"] = c
             try:
                 element["title"] = (a.find_element_by_tag_name("h3").text).replace('"',"'")
-                element ["url"] = (a.find_element_by_tag_name("cite").text).replace('"',"'")
+#                 print "data-href", ((a.find_element_by_tag_name("h3")).find_element_by_tag_name("a")).get_attribute("data-href")
+#                 print "url", ((a.find_element_by_tag_name("h3")).find_element_by_tag_name("a")).get_attribute("href")
+#                 element ["url"] = (a.find_element_by_tag_name("cite").text).replace('"',"'")
+                element ["url"] = ((a.find_element_by_tag_name("h3")).find_element_by_tag_name("a")).get_attribute("href")
                 element ["description"] = (a.find_element_by_css_selector("span.st").text).replace('"',"'")
             except:
                 element["title"] = (a.text).replace('"',"'")
