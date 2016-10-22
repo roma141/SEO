@@ -80,7 +80,7 @@ def bad_url(idPositions):
 
 def get_page_optz():
     bd = DB()
-    toDo = bd.Ejecuta("select id as idPositions, query from positions")
+    toDo = bd.Ejecuta("select id as idPositions, query, url from positions")
     done = bd.Ejecuta("SELECT idPositions FROM consolidatedPagesCrawl GROUP BY idPositions")
     badUrl = bd.Ejecuta("SELECT idPositions FROM badurl WHERE fix = 0 GROUP BY idPositions")
     for a in done:
