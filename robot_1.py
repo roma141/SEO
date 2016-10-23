@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import checkQuery
 import googleQuery
 import time
@@ -5,7 +7,7 @@ import time
 c = 0
 while True:
     time.sleep(2)
-    if c == 1:
+    if c == 10:
         break 
     try:
         checkQuery.check_query()

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import MySQLdb as mdb
 
@@ -19,7 +20,7 @@ class DB(object):
         self.db.commit()
 
     def Ejecuta(self, sql):
-        self.c.execute(sql)
+        self.c.execute(sql.encode("utf-8"))
         return [row for row in self.c.fetchall()]
 
     def Ejecuta1(self, sql):

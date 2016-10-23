@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from apiDB import DB
 
 def save_positions(query, positions):
@@ -80,19 +82,26 @@ def bad_url(idPositions):
 
 def get_page_optz():
     bd = DB()
-    toDo = bd.Ejecuta("select id as idPositions, query, url from positions")
-    done = bd.Ejecuta("SELECT idPositions FROM consolidatedPagesCrawl GROUP BY idPositions")
-    badUrl = bd.Ejecuta("SELECT idPositions FROM badurl WHERE fix = 0 GROUP BY idPositions")
-    for a in done:
-        for b in toDo:
-            if a["idPositions"] == b["idPositions"]:
-                toDo.remove(b)
-                break
-    for a in badUrl:
-        for b in toDo:
-            if a["idPositions"] == b["idPositions"]:
-                toDo.remove(b)
-                break
+    toDo = bd.Ejecuta("""SELECT positions.id AS idPositions, positions.query, positions.url 
+                        FROM positions
+                            JOIN pagescrawltext ON positions.id = pagescrawltext.idPositions
+                            LEFT JOIN consolidatedpagescrawl ON consolidatedpagescrawl.idPositions=pagescrawltext.idPositions
+                            LEFT JOIN badurl ON positions.id = badurl.idPositions 
+                        WHERE badUrl.id IS NULL 
+                            AND pagescrawltext.idPositions IS NOT NULL
+                            AND consolidatedpagescrawl.id IS NULL""")
+#     done = bd.Ejecuta("SELECT idPositions FROM consolidatedPagesCrawl GROUP BY idPositions")
+#     badUrl = bd.Ejecuta("SELECT idPositions FROM badurl WHERE fix = 0 GROUP BY idPositions")
+#     for a in done:
+#         for b in toDo:
+#             if a["idPositions"] == b["idPositions"]:
+#                 toDo.remove(b)
+#                 break
+#     for a in badUrl:
+#         for b in toDo:
+#             if a["idPositions"] == b["idPositions"]:
+#                 toDo.remove(b)
+#                 break
     bd.cierra()
     return toDo[0]
 
@@ -101,3 +110,9 @@ def get_page_data(idPositions):
     data = bd.Ejecuta("select position, type, text from pagesCrawl where idPositions=" + str(idPositions))
     bd.cierra()
     return data
+
+def save_page_optz(idPositions, urlDomain, optzUrl, optzTitle, optzH1, PA):
+    bd = DB()
+    bd.Ejecuta("""insert into consolidatedPagesCrawl (idPositions, isHomePage, urlOptz, titleTagOptz, h1Optz, pageAuthority) values(%s,%s,%s,%s,%s,%s)""" 
+                   % (idPositions, urlDomain, optzUrl, optzTitle, optzH1, PA))
+    bd.cierra()

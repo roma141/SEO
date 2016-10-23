@@ -1,4 +1,9 @@
 eclipse.preferences.version=1
 encoding//APIserver/apiDB.py=utf-8
+encoding//APIserver/apiServer.py=utf-8
+encoding/central_robot.py=utf-8
 encoding/consolidatedPages.py=utf-8
 encoding/googleQuery.py=utf-8
+encoding/pageCrawl.py=utf-8
+encoding/robot_1.py=utf-8
+encoding/robot_2.py=utf-8
