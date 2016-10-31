@@ -6,9 +6,9 @@ class DB(object):
 
     def __init__(self, nombrebd="seo", user="root", passwd=""):
 #         self.db = mdb.connect(host="mysql.myprodu.com",user="carlos",passwd="siempre1",db=nombrebd)
-#         self.db = mdb.connect(host="mysql.gtienda.com",user="carlos",passwd="siempre1",db=nombrebd)
+        self.db = mdb.connect(host="mysql.gtienda.com",user="carlos",passwd="siempre1",db=nombrebd, charset='utf8')
 #         self.db = mdb.connect(host="localhost",user="root",passwd="siempre1",db=nombrebd)
-        self.db = mdb.connect(host="192.168.1.109",user="carlos",passwd="123",db=nombrebd, charset='utf8')
+#         self.db = mdb.connect(host="192.168.1.109",user="carlos",passwd="123",db=nombrebd, charset='utf8')
         self.c = self.db.cursor(mdb.cursors.DictCursor)
         
     def cierra(self):
