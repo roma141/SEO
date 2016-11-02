@@ -46,7 +46,7 @@ def new_querys():
 def get_url():
     bd = DB()
     toDo = bd.Ejecuta("select id as idPositions, url from positions")
-    done = bd.Ejecuta("SELECT idPositions FROM pagesCrawlText GROUP BY idPositions")
+    done = bd.Ejecuta("SELECT idPositions FROM pagescrawltext GROUP BY idPositions")
     badUrl = bd.Ejecuta("SELECT idPositions FROM badurl WHERE fix = 0 GROUP BY idPositions")
     for a in done:
         for b in toDo:
@@ -64,13 +64,13 @@ def get_url():
 def save_tags(tags):
     bd = DB()
     for a in tags:
-        bd.Ejecuta("""insert into pagesCrawl (idPositions, position, type, text) values(%s,%s,"%s","%s")""" 
+        bd.Ejecuta("""insert into pagescrawl (idPositions, position, type, text) values(%s,%s,"%s","%s")""" 
                        % (a[0], a[1], a[2].encode("utf-8"), a[3].encode("utf-8")))
     bd.cierra()
 
 def save_full_text(idPositions, title, text):
     bd = DB()
-    bd.Ejecuta("""insert into pagesCrawlText (idPositions, title, text) values(%s,"%s","%s")""" 
+    bd.Ejecuta("""insert into pagescrawltext (idPositions, title, text) values(%s,"%s","%s")""" 
                    % (idPositions, title.encode("utf-8"), text.encode("utf-8")))
     bd.cierra()
 
@@ -87,10 +87,10 @@ def get_page_optz():
                             JOIN pagescrawltext ON positions.id = pagescrawltext.idPositions
                             LEFT JOIN consolidatedpagescrawl ON consolidatedpagescrawl.idPositions=pagescrawltext.idPositions
                             LEFT JOIN badurl ON positions.id = badurl.idPositions 
-                        WHERE badUrl.id IS NULL 
+                        WHERE badurl.id IS NULL 
                             AND pagescrawltext.idPositions IS NOT NULL
                             AND consolidatedpagescrawl.id IS NULL""")
-#     done = bd.Ejecuta("SELECT idPositions FROM consolidatedPagesCrawl GROUP BY idPositions")
+#     done = bd.Ejecuta("SELECT idPositions FROM consolidatedPagescrawl GROUP BY idPositions")
 #     badUrl = bd.Ejecuta("SELECT idPositions FROM badurl WHERE fix = 0 GROUP BY idPositions")
 #     for a in done:
 #         for b in toDo:
@@ -107,12 +107,12 @@ def get_page_optz():
 
 def get_page_data(idPositions):
     bd = DB()
-    data = bd.Ejecuta("select position, type, text from pagesCrawl where idPositions=" + str(idPositions))
+    data = bd.Ejecuta("select position, type, text from pagescrawl where idPositions=" + str(idPositions))
     bd.cierra()
     return data
 
 def save_page_optz(idPositions, urlDomain, optzUrl, optzTitle, optzH1, PA):
     bd = DB()
-    bd.Ejecuta("""insert into consolidatedPagesCrawl (idPositions, isHomePage, urlOptz, titleTagOptz, h1Optz, pageAuthority) values(%s,%s,%s,%s,%s,%s)""" 
+    bd.Ejecuta("""insert into consolidatedpagescrawl (idPositions, isHomePage, urlOptz, titleTagOptz, h1Optz, pageAuthority) values(%s,%s,%s,%s,%s,%s)""" 
                    % (idPositions, urlDomain, optzUrl, optzTitle, optzH1, PA))
     bd.cierra()
