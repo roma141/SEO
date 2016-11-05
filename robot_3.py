@@ -12,7 +12,7 @@ c = 0
 while True:
 #     time.sleep(2)
     print "round", c
-    if c == 10:
+    if c == 2:
         break 
     try:
         domainSeeker.domain_seeker()

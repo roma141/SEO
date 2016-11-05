@@ -41,7 +41,7 @@ def new_querys():
                 
     if querysDone:
         for a in querysDone:
-            bd.Ejecuta("""insert into terms (query, state) values("%s",%s)""" 
+            bd.Ejecuta("""insert into terms (term, state) values("%s",%s)""" 
                            % (a["term"].encode("utf-8"), 1))
     bd.cierra()
 

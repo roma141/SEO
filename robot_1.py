@@ -12,7 +12,7 @@ c = 0
 while True:
 	print c
 	time.sleep(2)
-	if c == 10:
+	if c == 1:
 	    break 
 	try:
 	    checkQuery.check_query()

@@ -12,8 +12,19 @@ def google_search():
     if querys:
         for q in querys:
             query = q["term"]
-            browser = webdriver.Chrome()
+            options = webdriver.ChromeOptions()
+            prefs = {"profile.default_content_setting_values.geolocation" :2}
+            options.add_experimental_option("prefs",prefs)
+            browser = webdriver.Chrome(chrome_options=options)
+            # browser = webdriver.Chrome()
             browser.get('http://google.com/')
+            lang = browser.find_element_by_id("_eEe")
+            if "english" in lang.text.lower():
+                # print "true"
+                a = lang.find_element(By.TAG_NAME, "a")
+                a.click()
+            else:
+                pass
             inputElement = browser.find_element_by_name("q")
             inputElement.send_keys(query)
             WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "sbqs_c")))
