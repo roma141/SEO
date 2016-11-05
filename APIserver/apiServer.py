@@ -5,42 +5,44 @@ from apiDB import DB
 def save_positions(query, positions):
     bd = DB()
     for a in positions:        
-        bd.Ejecuta("""insert into positions (query, position, title, url, description, date) values("%s", %s,"%s","%s","%s", UTC_TIMESTAMP())""" 
+        bd.Ejecuta("""insert into positions (term, position, title, url, description, date) values("%s", %s,"%s","%s","%s", UTC_TIMESTAMP())""" 
                        % (query.encode("utf-8"), a["position"], a["title"].encode("utf-8"), a["url"].encode("utf-8"), a["description"].encode("utf-8")))
     bd.cierra()
     
 def save_suggested(query,suggested):
     bd = DB()
     for a in suggested:
-        bd.Ejecuta("""insert into suggesteds (query, position, suggested, date) values("%s",%s,"%s", UTC_TIMESTAMP())""" 
+        bd.Ejecuta("""insert into suggesteds (term, position, suggested, date) values("%s",%s,"%s", UTC_TIMESTAMP())""" 
                        % (query.encode("utf-8"), a["position"], a["suggested"].encode("utf-8")))
     bd.cierra()
 
 def get_query():
     bd = DB()
-    querys = bd.Ejecuta("select query from querys where state=1")
-    return querys[0]["query"]
+    querys = bd.Ejecuta("select term from terms where state=1")
+    return querys
 
 def querys_done():
     bd = DB()
-    querysDone = bd.Ejecuta("select query from positions group by query")
-    for a in querysDone:
-        bd.Ejecuta("""update querys set query="%s", state=%s where query = "%s" """ 
-                       % (a["query"].encode("utf-8"), 0,a["query"].encode("utf-8")))
+    querysDone = bd.Ejecuta("select term from positions group by term")
+    if querysDone:
+        for a in querysDone:
+            bd.Ejecuta("""update terms set term="%s", state=%s where term = "%s" """ 
+                           % (a["term"].encode("utf-8"), 0,a["term"].encode("utf-8")))
     bd.cierra()
 
 def new_querys():
     bd = DB()
-    querys = bd.Ejecuta("select query from querys")
-    querysDone = bd.Ejecuta("select suggested as query from suggesteds group by suggested")
+    querys = bd.Ejecuta("select term from terms")
+    querysDone = bd.Ejecuta("select suggested as term from suggesteds group by suggested")
     for a in querys:
         for b in querysDone:
-            if a["query"] == b["query"]:
+            if a["term"] == b["term"]:
                 querysDone.remove(b)
                 
-    for a in querysDone:
-        bd.Ejecuta("""insert into querys (query, state) values("%s",%s)""" 
-                       % (a["query"].encode("utf-8"), 1))
+    if querysDone:
+        for a in querysDone:
+            bd.Ejecuta("""insert into terms (query, state) values("%s",%s)""" 
+                           % (a["term"].encode("utf-8"), 1))
     bd.cierra()
 
 def get_url():
@@ -59,7 +61,10 @@ def get_url():
                 toDo.remove(b)
                 break
     bd.cierra()
-    return toDo[0]
+    if toDo:
+        return toDo
+    else:
+        return []
 
 def save_tags(tags):
     bd = DB()
@@ -82,7 +87,7 @@ def bad_url(idPositions):
 
 def get_page_optz():
     bd = DB()
-    toDo = bd.Ejecuta("""SELECT positions.id AS idPositions, positions.query, positions.url 
+    toDo = bd.Ejecuta("""SELECT positions.id AS idPositions, positions.term, positions.url 
                         FROM positions
                             JOIN pagescrawltext ON positions.id = pagescrawltext.idPositions
                             LEFT JOIN consolidatedpagescrawl ON consolidatedpagescrawl.idPositions=pagescrawltext.idPositions
@@ -103,7 +108,10 @@ def get_page_optz():
 #                 toDo.remove(b)
 #                 break
     bd.cierra()
-    return toDo[0]
+    if toDo:
+        return toDo
+    else:
+        return []
 
 def get_page_data(idPositions):
     bd = DB()
@@ -113,6 +121,52 @@ def get_page_data(idPositions):
 
 def save_page_optz(idPositions, urlDomain, optzUrl, optzTitle, optzH1, PA):
     bd = DB()
-    bd.Ejecuta("""insert into consolidatedpagescrawl (idPositions, isHomePage, urlOptz, titleTagOptz, h1Optz, pageAuthority) values(%s,%s,%s,%s,%s,%s)""" 
+    bd.Ejecuta("""insert into consolidatedpagescrawl (idPositions, isHomePage, urlOptz, titleTagOptz, h1Optz, pageAuthority) 
+                    values(%s,%s,%s,%s,%s,%s)""" 
                    % (idPositions, urlDomain, optzUrl, optzTitle, optzH1, PA))
+    bd.cierra()
+
+def get_url_for_domain():
+    bd = DB()
+    data = bd.Ejecuta("""SELECT positions.id AS idPositions, positions.url, consolidatedpagescrawl.pageAuthority, positions.title
+                        FROM positions
+                        JOIN consolidatedpagescrawl 
+                        ON consolidatedpagescrawl.idPositions = positions.id AND consolidatedpagescrawl.idDomain = 0""")
+    bd.cierra()
+    return data
+def check_domain(domain):
+    bd = DB()
+    data = bd.Ejecuta("SELECT id FROM domains WHERE url='" + domain + "'")
+    bd.cierra()
+    if data:
+        return data[0]
+    else:
+        return []
+
+def add_domain(domain):
+    bd = DB()
+    bd.Ejecuta("insert into domains (url) values('%s') " % (domain.encode("utf-8")))
+    bd.cierra()
+
+def update_consolidate(idPositions, id):
+    bd = DB()
+    bd.Ejecuta("""update consolidatedpagescrawl set idDomain = %s where idPositions = %s""" 
+                       % (id, idPositions))
+    bd.cierra()
+
+def get_count_positions():
+    bd = DB()
+    data = bd.Ejecuta("SELECT COUNT(id) AS c FROM positions")
+    bd.cierra()
+    return data[0]["c"]
+def get_count_domain():
+    bd = DB()
+    data = bd.Ejecuta("SELECT idDomain,COUNT(idDomain) AS c FROM consolidatedpagescrawl GROUP BY idDomain")
+    bd.cierra()
+    return data
+
+def save_domain_authority(idDomain, authority):
+    bd = DB()
+    bd.Ejecuta("""update domains set authority = %s where id = %s""" 
+                       % (authority, idDomain))
     bd.cierra()

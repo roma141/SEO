@@ -3,11 +3,15 @@
 import pageCrawl
 import consolidatedPages
 # import time
+import sys  
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
 
 c = 0
 while True:
 #     time.sleep(2)
-    print c
+    print "round", c
     if c == 30:
         break 
     try:

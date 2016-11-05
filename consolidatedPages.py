@@ -25,53 +25,58 @@ def page_optz():
         line = ' '.join(line.split())
         return line
     
-    pageOptz = apiServer.get_page_optz()
-    idPositions = int(pageOptz["idPositions"])
-    query = pretty_line(pageOptz["query"])
-    rawUrl = pageOptz["url"]
-    url = pretty_line(pageOptz["url"])
-    optzTitle = 0.0
-    optzUrl = 0.0
-    optzUrl = check_optz(query, url)
-    data = apiServer.get_page_data(idPositions)
-    h1c = 0
-    h1 = 0.0
-    noH1 = 0
-    for a in data:
-    #     print a["type"]
-        if a["type"] == "h1":
-            line = pretty_line(a["text"])
-            h1 += check_optz(query, line)
-            h1c += 1
-            noH1 = 1
-        elif a["type"] == "h2":
-            line = pretty_line(a["text"])
-            optz = check_optz(query, line)
-        elif a["type"] == "img":
-            line = pretty_line(a["text"])
-            optz = check_optz(query, line)
-        elif a["type"] == "title":
-            line = pretty_line(a["text"])
-            optzTitle = check_optz(query, line)
-    
-    if noH1 < 0:    
-        if h1c < 1:
-            optzH1 = h1/(h1c * 2.0)
-        else:
-            optzH1 = h1
-    else:
-        optzH1 = h1
-    domain = ["com","org","edu","uk","co", "index.html", "index"]
-    pageDomain = []
-    urlDomain = 0.0
-    a = rawUrl.lower()
-    
-    if a.endswith("/"):
-        a = a[:-1]
-    if a.endswith("//"):
-        a = a[:-2]
-    for t in domain:
-        if a.endswith(t):
-            urlDomain = 1.0
-    
-    apiServer.save_page_optz(idPositions, urlDomain, optzUrl, optzTitle, optzH1, (urlDomain + optzUrl + optzTitle + optzH1))
+    d = 0
+    pageOptzs = apiServer.get_page_optz()
+    if pageOptzs:
+        for pageOptz in pageOptzs:
+            print "consolidate pages done %", d * 100.0/len(pageOptzs)
+            idPositions = int(pageOptz["idPositions"])
+            query = pretty_line(pageOptz["term"])
+            rawUrl = pageOptz["url"]
+            url = pretty_line(pageOptz["url"])
+            optzTitle = 0.0
+            optzUrl = 0.0
+            optzUrl = check_optz(query, url)
+            data = apiServer.get_page_data(idPositions)
+            h1c = 0
+            h1 = 0.0
+            noH1 = 0
+            for a in data:
+            #     print a["type"]
+                if a["type"] == "h1":
+                    line = pretty_line(a["text"])
+                    h1 += check_optz(query, line)
+                    h1c += 1
+                    noH1 = 1
+                elif a["type"] == "h2":
+                    line = pretty_line(a["text"])
+                    optz = check_optz(query, line)
+                elif a["type"] == "img":
+                    line = pretty_line(a["text"])
+                    optz = check_optz(query, line)
+                elif a["type"] == "title":
+                    line = pretty_line(a["text"])
+                    optzTitle = check_optz(query, line)
+            
+            if noH1 < 0:    
+                if h1c < 1:
+                    optzH1 = h1/(h1c * 2.0)
+                else:
+                    optzH1 = h1
+            else:
+                optzH1 = h1
+            domain = ["com","org","edu","uk","co", "index.html", "index"]
+            pageDomain = []
+            urlDomain = 0.0
+            a = rawUrl.lower()
+            
+            if a.endswith("/"):
+                a = a[:-1]
+            if a.endswith("//"):
+                a = a[:-2]
+            for t in domain:
+                if a.endswith(t):
+                    urlDomain = 1.0
+            
+            apiServer.save_page_optz(idPositions, urlDomain, optzUrl, optzTitle, optzH1, (urlDomain + optzUrl + optzTitle + optzH1))
+            d += 1
