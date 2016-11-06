@@ -2,23 +2,23 @@
 # -*- coding: utf-8 -*-
 from apiDB import DB
 
-def save_positions(query, positions):
+def save_positions(idTerm, query, positions):
     bd = DB()
     for a in positions:        
-        bd.Ejecuta("""insert into positions (term, position, title, url, description, date) values("%s", %s,"%s","%s","%s", UTC_TIMESTAMP())""" 
-                       % (query.encode("utf-8"), a["position"], a["title"].encode("utf-8"), a["url"].encode("utf-8"), a["description"].encode("utf-8")))
+        bd.Ejecuta("""insert into positions (idTerm, term, position, title, url, description, date) values(%s,"%s", %s,"%s","%s","%s", UTC_TIMESTAMP())""" 
+                       % (idTerm, query.encode("utf-8",'replace'), a["position"], a["title"].encode("utf-8",'replace'), a["url"].encode("utf-8"), a["description"].encode("utf-8",'replace')))
     bd.cierra()
     
-def save_suggested(query,suggested):
+def save_suggested(idTerm, query,suggested):
     bd = DB()
     for a in suggested:
-        bd.Ejecuta("""insert into suggesteds (term, position, suggested, date) values("%s",%s,"%s", UTC_TIMESTAMP())""" 
-                       % (query.encode("utf-8"), a["position"], a["suggested"].encode("utf-8")))
+        bd.Ejecuta("""insert into suggesteds (idTerm,term, position, suggested, date) values(%s,"%s",%s,"%s", UTC_TIMESTAMP())""" 
+                       % (idTerm, query.encode("utf-8"), a["position"], a["suggested"].encode("utf-8")))
     bd.cierra()
 
 def get_query():
     bd = DB()
-    querys = bd.Ejecuta("select term from terms where state=1")
+    querys = bd.Ejecuta("select id, term from terms where state=1")
     return querys
 
 def querys_done():

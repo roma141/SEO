@@ -6,8 +6,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from APIserver import apiServer
+import re
 
 def google_search():
+    def pretty_line(text):
+        line = re.sub('[^a-zA-Z0-9-á-ú_*.]', ' ', str(text))
+        line = re.sub('[!@#${}()/&--%"¿¡*,._]', ' ' , line)
+        line = ' '.join(line.split())
+        return line
     querys = apiServer.get_query()
     if querys:
         for q in querys:
@@ -51,18 +57,19 @@ def google_search():
                     element["position"] = c
                     try:
                         element["title"] = (a.find_element_by_tag_name("h3").text).replace('"',"'")
-        #                 print "data-href", ((a.find_element_by_tag_name("h3")).find_element_by_tag_name("a")).get_attribute("data-href")
-        #                 print "url", ((a.find_element_by_tag_name("h3")).find_element_by_tag_name("a")).get_attribute("href")
-        #                 element ["url"] = (a.find_element_by_tag_name("cite").text).replace('"',"'")
+                    except:
+                        element["title"] = pretty_line((a.text).replace('"',"'")).decode("utf-8",'ignore')
+                    try:
                         element ["url"] = ((a.find_element_by_tag_name("h3")).find_element_by_tag_name("a")).get_attribute("href")
+                    except:
+                        element ["url"] = "none"
+                    try:
                         element ["description"] = (a.find_element_by_css_selector("span.st").text).replace('"',"'")
                     except:
-                        element["title"] = (a.text).replace('"',"'")
-                        element ["url"] = "none"
-                        element ["description"] = (a.text).replace('"',"'")
+                        element ["description"] = pretty_line((a.text).replace('"',"'")).decode("utf-8",'ignore')
                     positions.append(element)
                     c += 1
             finally:
-                apiServer.save_positions(query, positions)
-                apiServer.save_suggested(query, suggested)
+                apiServer.save_positions(int(q["id"]),query, positions)
+                apiServer.save_suggested(int(q["id"]),query, suggested)
                 browser.quit()
