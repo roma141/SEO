@@ -45,7 +45,7 @@ def new_querys():
                            % (a["term"].encode("utf-8"), 1))
     bd.cierra()
 
-def get_url():
+def get_url2():
     bd = DB()
     toDo = bd.Ejecuta("select id as idPositions, url from positions")
     done = bd.Ejecuta("SELECT idPositions FROM pagescrawltext GROUP BY idPositions")
@@ -65,6 +65,21 @@ def get_url():
         return toDo
     else:
         return []
+
+def get_url():
+    bd = DB()
+    toDo = bd.Ejecuta("""SELECT positions.id AS idPositions, positions.url
+                        FROM positions
+                        LEFT JOIN pagescrawltext ON pagescrawltext.idPositions = positions.id
+                        LEFT JOIN badurl ON badurl.idpositions = positions.id
+                        WHERE pagescrawltext.id IS NULL
+                        AND badurl.id IS NULL
+                        LIMIT 0, 100""")
+    if toDo:
+        return toDo
+    else:
+        return []
+    bd.cierra()
 
 def save_tags(tags):
     bd = DB()
