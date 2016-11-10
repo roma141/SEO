@@ -169,11 +169,20 @@ def update_consolidate(idPositions, id):
                        % (id, idPositions))
     bd.cierra()
 
-def get_count_positions():
+def get_count_positions2():
     bd = DB()
     data = bd.Ejecuta("SELECT COUNT(id) AS c FROM positions")
     bd.cierra()
     return data[0]["c"]
+
+def get_count_positions():
+    bd = DB()
+    data = bd.Ejecuta("""SELECT COUNT(positions.id) AS c 
+                        FROM positions 
+                        JOIN consolidatedpagescrawl ON positions.id = consolidatedpagescrawl.idPositions""")
+    bd.cierra()
+    return data[0]["c"]
+
 def get_count_domain():
     bd = DB()
     data = bd.Ejecuta("SELECT idDomain,COUNT(idDomain) AS c FROM consolidatedpagescrawl GROUP BY idDomain")
