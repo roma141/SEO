@@ -46,6 +46,7 @@ if data:
 			statistic[str(t["idTerm"])][dif] += 1
 
 		c += 1
+	apiServer.save_statistic(statistic)
 	# print ""
 	# print statistic.keys()
 	# print statistic["1"]
