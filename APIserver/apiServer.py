@@ -23,6 +23,15 @@ def get_query():
 
 def querys_done():
     bd = DB()
+    querysDone = bd.Ejecuta("SELECT idTerm FROM positions GROUP BY idTerm")
+    if querysDone:
+        for a in querysDone:
+            bd.Ejecuta("""update terms set state=%s where id = %s """ 
+                           % (0, int(a["idTerm"])))
+    bd.cierra()
+
+def querys_done2():
+    bd = DB()
     querysDone = bd.Ejecuta("select term from positions group by term")
     if querysDone:
         for a in querysDone:
@@ -194,3 +203,13 @@ def save_domain_authority(idDomain, authority):
     bd.Ejecuta("""update domains set authority = %s where id = %s""" 
                        % (authority, idDomain))
     bd.cierra()
+
+def get_data_terms():
+    bd = DB()
+    data = bd.Ejecuta("""SELECT positions.idTerm, (consolidatedpagescrawl.isHomePage + consolidatedpagescrawl.titleTagOptz +
+                        consolidatedpagescrawl.urlOptz + consolidatedpagescrawl.h1Optz + domains.authority) AS score
+                        FROM consolidatedpagescrawl
+                        JOIN domains ON domains.id = consolidatedpagescrawl.idDomain
+                        JOIN positions ON positions.id = consolidatedpagescrawl.idPositions""")
+    bd.cierra()
+    return data
