@@ -26,27 +26,19 @@ m = len(data)
 if data:
 	for t in data:
 		normal = {"nightmare":0,"hardcore":0,"hard":0,"medium":0,"easy":0}
-		# print ""
 		print "#", c+1,"-", round(c*100.0/m, 2), "%"
-		# print len(statistic)
 		if statistic:
 			if statistic.has_key(str(t["idTerm"])):
-				# print "id term true"
 				dif = statistic_maker(t["score"])
 				statistic[str(t["idTerm"])][dif] += 1
 			else:
-				# print "id term - false - idTerm:", t["idTerm"]
 				statistic[str(t["idTerm"])] = normal
 				dif = statistic_maker(t["score"])
 				statistic[str(t["idTerm"])][dif] += 1
 		else:
-			# print "statistic - false - idTerm:", t["idTerm"]
 			statistic[str(t["idTerm"])] = normal
 			dif = statistic_maker(t["score"])
 			statistic[str(t["idTerm"])][dif] += 1
 
 		c += 1
 	apiServer.save_statistic(statistic)
-	# print ""
-	# print statistic.keys()
-	# print statistic["1"]
