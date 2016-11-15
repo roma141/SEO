@@ -218,7 +218,7 @@ def save_statistic(statistic):
     list = statistic.keys()
     bd = DB()
     for d in list:
-        bd.Ejecuta("insert into statistic (idTerm,nightmare,hardcore,hard,medium,easy) values(%s,%s,%s,%s,%s,%s) " 
+        bd.Ejecuta("REPLACE into statistic (idTerm,nightmare,hardcore,hard,medium,easy) values(%s,%s,%s,%s,%s,%s) " 
             % (int(d),int(statistic[d]["nightmare"]),int(statistic[d]["hardcore"]),int(statistic[d]["hard"]),
                 int(statistic[d]["medium"]),int(statistic[d]["easy"])))
     bd.cierra()
