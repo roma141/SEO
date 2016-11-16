@@ -4,6 +4,7 @@ encoding//APIserver/apiServer.py=utf-8
 encoding/central_robot.py=utf-8
 encoding/consolidatedPages.py=utf-8
 encoding/googleQuery.py=utf-8
+encoding/googleSearchStatistic.py=utf-8
 encoding/pageCrawl.py=utf-8
 encoding/robot_1.py=utf-8
 encoding/robot_2.py=utf-8
