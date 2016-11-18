@@ -222,3 +222,8 @@ def save_statistic(statistic):
             % (int(d),int(statistic[d]["nightmare"]),int(statistic[d]["hardcore"]),int(statistic[d]["hard"]),
                 int(statistic[d]["medium"]),int(statistic[d]["easy"])))
     bd.cierra()
+
+def get_terms_for_vol():
+    bd = DB()
+    querys = bd.Ejecuta("select id, term from terms")
+    return querys
