@@ -234,3 +234,14 @@ def save_terms_searchs(data):
         bd.Ejecuta("Update terms set google=%s,googleState=0 where term='%s'" 
             % (int(d["Searches"]),d["Keyword"].encode("utf-8")))
     bd.cierra()
+
+def save_terms(data):
+    bd = DB()
+    for d in data:
+        bd.Ejecuta("""INSERT INTO terms (term)
+                        SELECT * FROM (SELECT '%s') AS tmp
+                        WHERE NOT EXISTS (
+                            SELECT term FROM terms WHERE term = '%s'
+                        ) LIMIT 1; """
+            % (d.encode("utf-8"),d.encode("utf-8")))
+    bd.cierra()
