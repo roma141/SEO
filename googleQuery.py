@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from APIserver import apiServer
 import re
 import random
@@ -41,6 +42,7 @@ def google_search():
             WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "sbqs_c")))
             suggestedSearch = browser.find_elements_by_class_name("sbqs_c")
             inputElement.submit()
+            # inputElement.send_keys(Keys.ENTER)
             try:
                 suggested = []
                 positions = []
