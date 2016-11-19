@@ -16,7 +16,8 @@ def page_crawl():
                 urlopen = http.request('GET', page["url"])
             except:
                 apiServer.bad_url(idPositions)
-                return
+                d += 1
+                continue
             soup = BeautifulSoup(urlopen.data, "html.parser")
             
             def get_full_text(page):

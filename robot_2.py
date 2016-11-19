@@ -12,7 +12,7 @@ c = 0
 while True:
 #     time.sleep(2)
     print "round", c
-    if c == 30:
+    if c == 30: 
         break 
     try:
         pageCrawl.page_crawl()

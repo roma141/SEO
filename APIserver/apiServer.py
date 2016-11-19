@@ -227,3 +227,10 @@ def get_terms_for_vol():
     bd = DB()
     querys = bd.Ejecuta("select id, term from terms")
     return querys
+
+def save_terms_searchs(data):
+    bd = DB()
+    for d in data:
+        bd.Ejecuta("Update terms set google=%s,googleState=0 where term='%s'" 
+            % (int(d["Searches"]),d["Keyword"].encode("utf-8")))
+    bd.cierra()
