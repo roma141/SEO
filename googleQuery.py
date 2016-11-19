@@ -18,7 +18,9 @@ def google_search():
         return line
     querys = apiServer.get_query()
     if querys:
+        d = 0
         for q in querys:
+            print "page crawl done %", (d * 100.0)/len(querys)
             time.sleep(round(random.uniform(7,13),1))
             query = q["term"]
             options = webdriver.ChromeOptions()
@@ -76,3 +78,4 @@ def google_search():
                 apiServer.save_positions(int(q["id"]),query, positions)
                 apiServer.save_suggested(int(q["id"]),query, suggested)
                 browser.quit()
+                d += 1

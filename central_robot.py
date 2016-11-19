@@ -1,4 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import robot_1
-import robot_2
+import checkQuery
+import googleQuery
+import sys
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
+
+checkQuery.check_query()
+googleQuery.google_search()
