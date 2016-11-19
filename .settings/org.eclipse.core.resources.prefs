@@ -9,3 +9,5 @@ encoding/googleSearchStatistic.py=utf-8
 encoding/pageCrawl.py=utf-8
 encoding/robot_1.py=utf-8
 encoding/robot_2.py=utf-8
+encoding/robot_3.py=utf-8
+encoding/statistic.py=utf-8

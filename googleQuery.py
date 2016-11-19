@@ -7,6 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from APIserver import apiServer
 import re
+import random
+import time
 
 def google_search():
     def pretty_line(text):
@@ -17,6 +19,7 @@ def google_search():
     querys = apiServer.get_query()
     if querys:
         for q in querys:
+            time.sleep(round(random.uniform(7,13),1))
             query = q["term"]
             options = webdriver.ChromeOptions()
             prefs = {"profile.default_content_setting_values.geolocation" :2}

@@ -18,4 +18,7 @@ for t in terms:
 		total = total + ","+ pretty_line(t["term"])
 	c += 1
 
-print total
+# print total
+import random
+for a in xrange(0,100):
+	print round(random.uniform(7,13),1)

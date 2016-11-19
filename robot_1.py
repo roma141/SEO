@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 import checkQuery
 import googleQuery
-import time
-import sys  
+# import time
+import sys
+# import random
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -11,7 +12,7 @@ sys.setdefaultencoding('utf8')
 c = 0
 while True:
 	print c
-	time.sleep(2)
+	# time.sleep(round(random.uniform(7,13),1))
 	if c == 10:
 	    break 
 	try:
