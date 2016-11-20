@@ -19,6 +19,6 @@ for t in terms:
 	c += 1
 
 # print total
-import random
-for a in xrange(0,100):
-	print round(random.uniform(7,13),1)
+# import random
+# for a in xrange(0,100):
+# 	print round(random.uniform(7,13),1)

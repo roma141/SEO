@@ -11,13 +11,18 @@ def page_crawl():
         for page in pages:
             print "page crawl done %", (d * 100.0)/len(pages)
             idPositions = int(page["idPositions"])
+            print page["url"]
             http = urllib3.PoolManager()
             try:
-                urlopen = http.request('GET', page["url"])
+                urlopen = http.request('GET', page["url"], timeout=60)
             except:
-                apiServer.bad_url(idPositions)
-                d += 1
-                continue
+                if "http".lower() in page["url"].lower():
+                    d += 1
+                    continue
+                else:
+                    apiServer.bad_url(idPositions)
+                    d += 1
+                    continue
             soup = BeautifulSoup(urlopen.data, "html.parser")
             
             def get_full_text(page):
