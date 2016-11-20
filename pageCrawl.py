@@ -11,12 +11,12 @@ def page_crawl():
         for page in pages:
             print "page crawl done %", (d * 100.0)/len(pages)
             idPositions = int(page["idPositions"])
-            print page["url"]
             http = urllib3.PoolManager()
             try:
                 urlopen = http.request('GET', page["url"], timeout=60)
             except:
                 if "http".lower() in page["url"].lower():
+                    print page["url"]
                     d += 1
                     continue
                 else:

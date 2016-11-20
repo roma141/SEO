@@ -83,7 +83,7 @@ def get_url():
                         LEFT JOIN badurl ON badurl.idpositions = positions.id
                         WHERE pagescrawltext.id IS NULL
                         AND badurl.id IS NULL
-                        LIMIT 0, 100""")
+                        LIMIT 0, 500""")
     if toDo:
         return toDo
     else:
