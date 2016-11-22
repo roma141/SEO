@@ -225,7 +225,7 @@ def save_statistic(statistic):
 
 def get_terms_for_vol():
     bd = DB()
-    querys = bd.Ejecuta("select id, term from terms")
+    querys = bd.Ejecuta("SELECT id, term,googleState FROM terms WHERE googleState = 1 LIMIT 0, 900")
     return querys
 
 def save_terms_searchs(data):
