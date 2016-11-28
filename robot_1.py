@@ -13,7 +13,7 @@ c = 0
 while True:
 	print c
 	# time.sleep(round(random.uniform(7,13),1))
-	if c == 10:
+	if c == 30:
 	    break 
 	try:
 	    checkQuery.check_query()

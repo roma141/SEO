@@ -39,8 +39,14 @@ def google_search():
                 pass
             inputElement = browser.find_element_by_name("q")
             inputElement.send_keys(query)
-            WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "sbqs_c")))
-            suggestedSearch = browser.find_elements_by_class_name("sbqs_c")
+            try:
+                WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "sbqs_c")))
+                suggestedSearch = browser.find_elements_by_class_name("sbqs_c")
+            except Exception as e:
+                print e
+                suggestedSearch = []
+            # WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "sbqs_c")))
+            # suggestedSearch = browser.find_elements_by_class_name("sbqs_c")
             inputElement.submit()
             # inputElement.send_keys(Keys.ENTER)
             try:
