@@ -7,5 +7,5 @@ import sys
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-checkQuery.check_query()
+# checkQuery.check_query()
 googleQuery.google_search()

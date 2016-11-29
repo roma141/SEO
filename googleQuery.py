@@ -21,7 +21,7 @@ def google_search():
     if querys:
         d = 0
         for q in querys:
-            print "page crawl done %", (d * 100.0)/len(querys)
+            print "google query crawl done %", (d * 100.0)/len(querys)
             time.sleep(round(random.uniform(7,13),1))
             query = q["term"]
             options = webdriver.ChromeOptions()
@@ -54,12 +54,13 @@ def google_search():
                 positions = []
                 WebDriverWait(browser, 10).until(EC.title_contains(query))
                 c = 1
-                for a in suggestedSearch:
-                    element = {}
-                    element["position"] = c
-                    element["suggested"] = a.text
-                    suggested.append(element)
-                    c += 1
+                if suggestedSearch:
+                    for a in suggestedSearch:
+                        element = {}
+                        element["position"] = c
+                        element["suggested"] = a.text
+                        suggested.append(element)
+                        c += 1
                 WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CLASS_NAME, "g")))
                 googleSearch = browser.find_elements_by_class_name("g")
                 c = 1
@@ -82,6 +83,10 @@ def google_search():
                         element ["description"] = pretty_line((a.text).replace('"',"'")).decode("utf-8",'ignore')
                     positions.append(element)
                     c += 1
+            except:
+                browser.quit()
+                d += 1
+                print "error google query", sys.exc_info()[0]
             finally:
                 apiServer.save_positions(int(q["id"]),query, positions)
                 apiServer.save_suggested(int(q["id"]),query, suggested)

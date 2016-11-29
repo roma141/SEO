@@ -18,7 +18,7 @@ def save_suggested(idTerm, query,suggested):
 
 def get_query():
     bd = DB()
-    querys = bd.Ejecuta("select id, term from terms where state=1")
+    querys = bd.Ejecuta("select id, term from terms where state=1 LIMIT 0, 500")
     return querys
 
 def querys_done():

@@ -9,6 +9,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 c = 0
+print "robot 2"
 while True:
 #     time.sleep(2)
     print "round", c
@@ -16,6 +17,12 @@ while True:
         break 
     try:
         pageCrawl.page_crawl()
-        consolidatedPages.page_optz()
+    except:
+    	print "error page_crawl"
+    try:
+    	consolidatedPages.page_optz()
+    except Exception as e:
+    	print "error page_optz"
+    	print e
     finally:
         c += 1

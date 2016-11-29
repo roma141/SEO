@@ -16,6 +16,11 @@ while True:
         break 
     try:
         domainSeeker.domain_seeker()
-        domainAuthority.domain_authority()
+    except:
+    	print "error domain_seeker"
+	try:
+		domainAuthority.domain_authority()
+	except:
+		print "error domain_authority"
     finally:
         c += 1
