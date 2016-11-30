@@ -83,10 +83,15 @@ def google_search():
                         element ["description"] = pretty_line((a.text).replace('"',"'")).decode("utf-8",'ignore')
                     positions.append(element)
                     c += 1
+            except IOError as e:
+                print "error google query - I/O error({0}): {1}".format(e.errno, e.strerror)
+            except ValueError:
+                print "error google query - Could not convert data to an integer."
             except:
                 browser.quit()
                 d += 1
-                print "error google query", sys.exc_info()[0]
+                print ""
+                print "error google query"
             finally:
                 apiServer.save_positions(int(q["id"]),query, positions)
                 apiServer.save_suggested(int(q["id"]),query, suggested)

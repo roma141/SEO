@@ -24,7 +24,8 @@ while True:
 	# except ValueError:
 	#     print "check_query - Could not convert data to an integer."
 	except:
-	    print "check_query - Unexpected error:", sys.exc_info()[0]
+		print ""
+		print "check_query - Unexpected error:", sys.exc_info()[0]
 	try:
 	    # checkQuery.check_query()
 	    googleQuery.google_search()

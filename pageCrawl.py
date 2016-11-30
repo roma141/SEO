@@ -17,13 +17,24 @@ def page_crawl():
             except:
                 if "http".lower() in page["url"].lower():
                     print page["url"]
+                    try:
+                        apiServer.error_position(idPositions)
+                    except:
+                        print "error_position - page crawl"
                     d += 1
                     continue
                 else:
                     apiServer.bad_url(idPositions)
                     d += 1
                     continue
-            soup = BeautifulSoup(urlopen.data, "html.parser")
+            try:
+                soup = BeautifulSoup(urlopen.data, "html.parser")
+            except:
+                apiServer.error_position(idPositions)
+                print "error_position - page crawl - html.parser cannot parse the given document"
+                d += 1
+                continue
+            # soup = BeautifulSoup(urlopen.data, "html.parser")
             
             def get_full_text(page):
                 for script in page(['style', 'script', '[document]', 'head', 'title', 'meta']):

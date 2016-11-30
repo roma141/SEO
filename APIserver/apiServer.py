@@ -75,7 +75,7 @@ def get_url2():
     else:
         return []
 
-def get_url():
+def get_url2():
     bd = DB()
     toDo = bd.Ejecuta("""SELECT positions.id AS idPositions, positions.url
                         FROM positions
@@ -83,6 +83,23 @@ def get_url():
                         LEFT JOIN badurl ON badurl.idpositions = positions.id
                         WHERE pagescrawltext.id IS NULL
                         AND badurl.id IS NULL
+                        LIMIT 0, 500""")
+    if toDo:
+        return toDo
+    else:
+        return []
+    bd.cierra()
+
+def get_url():
+    bd = DB()
+    toDo = bd.Ejecuta("""SELECT positions.id AS idPositions, positions.url
+                        FROM positions
+                        LEFT JOIN pagescrawltext ON pagescrawltext.idPositions = positions.id
+                        LEFT JOIN badurl ON badurl.idpositions = positions.id
+                        LEFT JOIN errorPositions ON errorPositions.idPosition = positions.id
+                        WHERE pagescrawltext.id IS NULL
+                        AND badurl.id IS NULL
+                        AND errorPositions.id IS NULL
                         LIMIT 0, 500""")
     if toDo:
         return toDo
@@ -226,6 +243,7 @@ def save_statistic(statistic):
 def get_terms_for_vol():
     bd = DB()
     querys = bd.Ejecuta("SELECT id, term,googleState FROM terms WHERE googleState = 1 LIMIT 0, 900")
+    bd.cierra()
     return querys
 
 def save_terms_searchs(data):
@@ -244,4 +262,9 @@ def save_terms(data):
                             SELECT term FROM terms WHERE term = '%s'
                         ) LIMIT 1; """
             % (d.encode("utf-8"),d.encode("utf-8")))
+    bd.cierra()
+
+def error_position(idposition):
+    bd = DB()
+    bd.Ejecuta("insert into errorPositions (idPosition) values(%s)" % (int(idposition)))
     bd.cierra()
