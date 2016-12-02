@@ -26,19 +26,23 @@ m = len(data)
 if data:
 	for t in data:
 		normal = {"nightmare":0,"hardcore":0,"hard":0,"medium":0,"easy":0}
-		print "#", c+1,"-", round(c*100.0/m, 2), "%"
-		if statistic:
-			if statistic.has_key(str(t["idTerm"])):
-				dif = statistic_maker(t["score"])
-				statistic[str(t["idTerm"])][dif] += 1
+		print "#", c+1,"id", str(t["idTerm"]),"-", round(c*100.0/m, 2), "%"
+		try:
+			if statistic:
+				# print str(t["idTerm"])
+				if statistic.has_key(str(t["idTerm"])):
+					dif = statistic_maker(t["score"])
+					statistic[str(t["idTerm"])][dif] += 1
+				else:
+					statistic[str(t["idTerm"])] = normal
+					dif = statistic_maker(t["score"])
+					statistic[str(t["idTerm"])][dif] += 1
 			else:
 				statistic[str(t["idTerm"])] = normal
 				dif = statistic_maker(t["score"])
 				statistic[str(t["idTerm"])][dif] += 1
-		else:
-			statistic[str(t["idTerm"])] = normal
-			dif = statistic_maker(t["score"])
-			statistic[str(t["idTerm"])][dif] += 1
+		except:
+			print "error on statistic id =", str(t["idTerm"])
 
 		c += 1
 	apiServer.save_statistic(statistic)
