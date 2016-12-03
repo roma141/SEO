@@ -18,7 +18,7 @@ while True:
 	    break 
 	try:
 		print "check_query"
-		checkQuery.check_query()
+		# checkQuery.check_query()
 	    # googleQuery.google_search()
 	# except IOError as e:
 	# 	print "check_query - I/O error({0}): {1}".format(e.errno, e.strerror)
