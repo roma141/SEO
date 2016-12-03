@@ -17,6 +17,7 @@ while True:
 	if c == 30:
 	    break 
 	try:
+		print "check_query"
 	    checkQuery.check_query()
 	    # googleQuery.google_search()
 	# except IOError as e:
@@ -28,6 +29,7 @@ while True:
 		print "check_query - Unexpected error:", sys.exc_info()[0]
 	try:
 	    # checkQuery.check_query()
+	    print "google_search()"
 	    googleQuery.google_search()
 	# except IOError as e:
 	# 	print "google_search - I/O error({0}): {1}".format(e.errno, e.strerror)
