@@ -18,7 +18,7 @@ while True:
 	    break 
 	try:
 		print "check_query"
-	    checkQuery.check_query()
+		checkQuery.check_query()
 	    # googleQuery.google_search()
 	# except IOError as e:
 	# 	print "check_query - I/O error({0}): {1}".format(e.errno, e.strerror)
@@ -29,7 +29,7 @@ while True:
 		print "check_query - Unexpected error:", sys.exc_info()[0]
 	try:
 	    # checkQuery.check_query()
-	    print "google_search()"
+	    print "google_search"
 	    googleQuery.google_search()
 	# except IOError as e:
 	# 	print "google_search - I/O error({0}): {1}".format(e.errno, e.strerror)
