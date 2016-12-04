@@ -18,6 +18,7 @@ def page_crawl():
                 # drop blank lines
                 text = '\n'.join(chunk for chunk in chunks if chunk)
                 return text
+
     if pages:
         for page in pages:
             try:
@@ -101,4 +102,6 @@ def page_crawl():
                 apiServer.save_full_text(idPositions,title.replace('"',"'"),text.replace('"',"'"))
                 d += 1
             except:
+                print "error page_crawl id=",idPositions, "url=",page["url"]
+                apiServer.error_position(idPositions)
                 d += 1
